@@ -1,0 +1,70 @@
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+_ReSharper*/
+_ReSharper.Caches/
+
+## NuGet
+packages/
+*.nupkg
+project.lock.json
+artifacts/
+
+## IIS Express
+iisexpress/
+*.vspscc
+
+## ASP.NET MVC
+App_Data/
+*.dbmdl
+
+## Tests
+TestResults/
+*.coverage
+*.coveragexml
+
+## Azure
+*.publishsettings
+csx/
+*.azurePubxml
+PublishProfiles/
+
+## Logs & cache
+*.log
+*.tlog
+*.pidb
+*.cache
+*.tok
+*.svclog
+
+## IDE / tooling
+*.pidb
+*.psess
+*.vsp
+*.vsmdi
+
+## Configuration secretas
+appsettings.*.json
+*.secret
+
+## OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+## Git
+*.orig
+
+## Rider / JetBrains
+.idea/
+*.DotSettings.user
