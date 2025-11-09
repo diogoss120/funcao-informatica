@@ -25,64 +25,89 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult Incluir(ClienteModel model)
         {
-            BoCliente bo = new BoCliente();
-
-            var cpfExistente = CpfValidador.VerificarExistencia(model.Cpf.GetCpfLimpo());
-            if(cpfExistente) ModelState.AddModelError("Cpf", "O CPF informado já está sendo usado");
-
-            var cpfValido = CpfValidador.ValidarCpf(model.Cpf.GetCpfLimpo());
-            if (!cpfValido) ModelState.AddModelError("Cpf", "O CPF informado é inválido");
-
-            if (!this.ModelState.IsValid)
+            try
             {
-                List<string> erros = (from item in ModelState.Values
-                                      from error in item.Errors
-                                      select error.ErrorMessage).ToList();
+                if (model == null)
+                {
+                    Response.StatusCode = 400;
+                    return Json("Requisição inválida.");
+                }
 
-                Response.StatusCode = 400;
-                return Json(string.Join(Environment.NewLine, erros));
-            }
-            else
-            {
-                
-                model.Id = bo.Incluir(new Cliente()
-                {                    
+                var cpfLimpo = model.Cpf?.GetCpfLimpo();
+                if (!string.IsNullOrEmpty(cpfLimpo))
+                {
+                    var cpfExistente = CpfValidador.VerificarExistencia(cpfLimpo);
+                    if (cpfExistente) ModelState.AddModelError("Cpf", "O CPF informado já está sendo usado");
+
+                    var cpfValido = CpfValidador.ValidarCpf(cpfLimpo);
+                    if (!cpfValido) ModelState.AddModelError("Cpf", "O CPF informado é inválido");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    var erros = (from item in ModelState.Values
+                                 from error in item.Errors
+                                 select error.ErrorMessage).ToList();
+
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, erros));
+                }
+
+                var bo = new BoCliente();
+
+                model.Id = bo.Incluir(new Cliente
+                {
                     CEP = model.CEP,
                     Cidade = model.Cidade,
                     Email = model.Email,
                     Estado = model.Estado,
                     Logradouro = model.Logradouro,
                     Nacionalidade = model.Nacionalidade,
-                    Cpf = model.Cpf.GetCpfLimpo(),
+                    Cpf = cpfLimpo,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone
                 });
 
-           
                 return Json("Cadastro efetuado com sucesso");
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 500;
+                return Json("Ocorreu um erro interno no servidor.");
             }
         }
 
         [HttpPost]
         public JsonResult Alterar(ClienteModel model)
         {
-            BoCliente bo = new BoCliente();
-            var cpfValido = CpfValidador.ValidarCpf(model.Cpf.GetCpfLimpo());
-            if (!cpfValido) ModelState.AddModelError("", "O CPF informado é inválido");
-
-            if (!this.ModelState.IsValid)
+            try
             {
-                List<string> erros = (from item in ModelState.Values
-                                      from error in item.Errors
-                                      select error.ErrorMessage).ToList();
+                if (model == null || model.Id <= 0)
+                {
+                    Response.StatusCode = 400;
+                    return Json("Requisição inválida.");
+                }
 
-                Response.StatusCode = 400;
-                return Json(string.Join(Environment.NewLine, erros));
-            }
-            else
-            {
-                bo.Alterar(new Cliente()
+                var cpfLimpo = model.Cpf?.GetCpfLimpo();
+                if (!string.IsNullOrEmpty(cpfLimpo))
+                {
+                    var cpfValido = CpfValidador.ValidarCpf(cpfLimpo);
+                    if (!cpfValido) ModelState.AddModelError("Cpf", "O CPF informado é inválido");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    var erros = (from item in ModelState.Values
+                                 from error in item.Errors
+                                 select error.ErrorMessage).ToList();
+
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, erros));
+                }
+
+                var bo = new BoCliente();
+                bo.Alterar(new Cliente
                 {
                     Id = model.Id,
                     CEP = model.CEP,
@@ -91,13 +116,18 @@ namespace WebAtividadeEntrevista.Controllers
                     Estado = model.Estado,
                     Logradouro = model.Logradouro,
                     Nacionalidade = model.Nacionalidade,
-                    Cpf = model.Cpf.GetCpfLimpo(),
+                    Cpf = cpfLimpo,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone
                 });
-                               
+
                 return Json("Cadastro alterado com sucesso");
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 500;
+                return Json("Ocorreu um erro interno no servidor.");
             }
         }
 
@@ -106,7 +136,7 @@ namespace WebAtividadeEntrevista.Controllers
         {
             BoCliente bo = new BoCliente();
             Cliente cliente = bo.Consultar(id);
-            Models.ClienteModel model = null;
+            ClienteModel model = null;
 
             if (cliente != null)
             {
@@ -124,8 +154,6 @@ namespace WebAtividadeEntrevista.Controllers
                     Sobrenome = cliente.Sobrenome,
                     Telefone = cliente.Telefone
                 };
-
-            
             }
 
             return View(model);
