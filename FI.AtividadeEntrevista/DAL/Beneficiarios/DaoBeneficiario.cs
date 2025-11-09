@@ -23,7 +23,7 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             return ret;
         }
 
-        internal List<Beneficiario> Consultar(long IdCliente)
+        internal List<Beneficiario> ListarPorCliente(long IdCliente)
         {
             List<SqlParameter> parametros = new List<SqlParameter>();
 
@@ -33,6 +33,33 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             List<Beneficiario> cli = Converter(ds);
 
             return cli;
+        }
+
+        internal Beneficiario ObterPorId(long id)
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("Id", id));
+
+            DataSet ds = base.Consultar("FI_SP_ObterBenefPorId", parametros);
+
+            // Reaproveita o método Converter e pega o primeiro item
+            List<Beneficiario> lista = Converter(ds);
+
+            return lista.FirstOrDefault();
+        }
+
+        internal bool Alterar(Beneficiario beneficiario)
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+
+            parametros.Add(new SqlParameter("Nome", beneficiario.Nome));
+            parametros.Add(new SqlParameter("Cpf", beneficiario.Cpf));
+            parametros.Add(new SqlParameter("Id", beneficiario.Id));
+
+            // Executa o comando
+            DataSet ds = base.Consultar("FI_SP_AltBenef", parametros);
+
+            return true;
         }
 
         private List<Beneficiario> Converter(DataSet ds)

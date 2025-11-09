@@ -53,6 +53,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DAL\Beneficiarios\Procedures\FI_SP_AltBenef.sql" />
+    <Content Include="DAL\Beneficiarios\Procedures\FI_SP_ObterBenefPorId.sql" />
     <Content Include="DAL\Beneficiarios\Procedures\FI_SP_ListarBenefPorCliente.sql" />
     <Content Include="DAL\Beneficiarios\Procedures\FI_SP_InsBenef.sql" />
     <Content Include="DAL\Clientes\Procedures\FI_SP_AltCliente.sql" />

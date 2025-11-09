@@ -17,10 +17,22 @@ namespace FI.AtividadeEntrevista.BLL
             return daoBeneficiario.Incluir(beneficiario);
         }
 
-        public List<Beneficiario> Consultar(long idCliente)
+        public bool Alterar(Beneficiario beneficiario)
         {
             var daoBeneficiario = new DaoBeneficiario();
-            return daoBeneficiario.Consultar(idCliente);   
+            return daoBeneficiario.Alterar(beneficiario);
+        }
+
+        public List<Beneficiario> ListarPorCliente(long idCliente)
+        {
+            var daoBeneficiario = new DaoBeneficiario();
+            return daoBeneficiario.ListarPorCliente(idCliente);   
+        }
+
+        public Beneficiario ObterPorId(long idCliente)
+        {
+            var daoBeneficiario = new DaoBeneficiario();
+            return daoBeneficiario.ObterPorId(idCliente);
         }
     }
 }

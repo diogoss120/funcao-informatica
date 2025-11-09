@@ -19,9 +19,7 @@ $(document).ready(function () {
             },
             success: function (r) {
                 var $table = $('#tblBeneficiarios');
-                console.warn("Tabela carregada");
                 carregarBeneficiarios($table);
-                console.warn("beneficiarios carregados");
                 ModalDialog("Sucesso!", r);
                 $("#formBeneficiario")[0].reset();
                 $("#modalBeneficiario").modal('hide');
@@ -34,23 +32,94 @@ $(document).ready(function () {
     // Handler do botão "Alterar" (delegado)
     $(document).on('click', '#tblBeneficiarios .js-alterar', function () {
         var idBeneficiario = $(this).data('id');
-        // Aqui você decide o que fazer:
-        // 1) Abrir modal de edição
-        // $('#meuModalEdicao').data('id', idBeneficiario).modal('show');
-        // 2) Navegar para action Editar
-        window.location.href = '/Beneficiario/Editar/' + encodeURIComponent(idBeneficiario);
+        abrirModalEdicao(idBeneficiario);
     });
 
     // Inicialização no carregamento da página
-    var $table = $('#tblBeneficiarios');
-    if ($table.length) {
-        carregarBeneficiarios($table);
-    }
+    carregarBeneficiarios();
 
+    $('#formEditarBeneficiario').on('submit', function (e) {
+        e.preventDefault();
+
+        var $btn = $('#btnSalvarEdicao');
+        $btn.prop('disabled', true).data('old-text', $btn.text()).text('Salvando...');
+
+        var payload = {
+            Id: $('#BeneficiarioIdEdt').val(),
+            Nome: $('#NomeEdt').val(),
+            Cpf: $('#CpfEdt').val()
+            // Se a sua API exigir IdCliente na alteração, inclua:
+            // IdCliente: (typeof obj !== 'undefined' && obj) ? obj.Id : null
+        };
+
+        $.ajax({
+            url: '/Beneficiario/Alterar',
+            type: 'POST',
+            data: payload,
+            dataType: 'json'
+        })
+            .done(function (r) {
+                // Recarrega a tabela após atualizar
+                carregarBeneficiarios();
+
+                ModalDialog('Sucesso!', r || 'Beneficiário atualizado com sucesso.');
+                $('#modalEditarBeneficiario').modal('hide');
+            })
+            .fail(function (xhr) {
+                if (xhr.status === 400 && xhr.responseJSON) {
+                    ModalDialog('Atenção', xhr.responseJSON);
+                } else if (xhr.status === 500) {
+                    ModalDialog('Erro', 'Ocorreu um erro interno no servidor.');
+                } else {
+                    ModalDialog('Erro', 'Não foi possível salvar a alteração.');
+                }
+                console.error('Falha ao alterar beneficiário:', xhr);
+            })
+            .always(function () {
+                $btn.prop('disabled', false).text($btn.data('old-text'));
+            });
+    });
 });
 
-console.warn("script do beneficiário carregou");
+function abrirModalEdicao(idBeneficiario) {
+    // Reset de estado
+    $('#formEditarBeneficiario')[0].reset();
+    $('#BeneficiarioIdEdt').val('');
+    $('#btnSalvarEdicao').prop('disabled', true);
+    $('#editarLoading').show();
 
+    // Abre modal imediatamente (com "Carregando..."), depois preenche
+    $('#modalEditarBeneficiario').modal('show');
+
+    // Endpoint que retorna os dados do beneficiário por ID
+    // Ajuste se seu endpoint tiver outro nome/caminho ou parâmetro:
+    $.ajax({
+        url: '/Beneficiario/Obter',
+        type: 'POST',
+        data: { id: idBeneficiario },
+        dataType: 'json'
+    })
+        .done(function (dados) {
+            // Tenta cobrir PascalCase/camelCase
+            var id = dados.Id != null ? dados.Id : dados.id;
+            var nome = dados.Nome != null ? dados.Nome : dados.nome;
+            var cpf = dados.Cpf != null ? dados.Cpf : dados.cpf;
+
+            $('#BeneficiarioIdEdt').val(id || '');
+            $('#NomeEdt').val(nome || '');
+            $('#CpfEdt').val(cpf || '');
+
+            $('#btnSalvarEdicao').prop('disabled', false);
+        })
+        .fail(function (xhr) {
+            ModalDialog('Erro', 'Não foi possível carregar os dados do beneficiário.');
+            $('#modalEditarBeneficiario').modal('hide');
+            console.error('Falha ao obter beneficiário:', xhr);
+        })
+        .always(function () {
+            $('#editarLoading').hide();
+        });
+}
 
 // Utilitário simples para escapar HTML
 function esc(str) {
@@ -99,7 +168,8 @@ function popularTabela($tbody, lista) {
 }
 
 // Carrega beneficiários via POST
-function carregarBeneficiarios($table) {
+function carregarBeneficiarios() {
+    var $table = $('#tblBeneficiarios');
     var $tbody = $table.find('tbody');
 
     idClienteEdicao = obj.Id;

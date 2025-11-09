@@ -109,22 +109,29 @@
                 <form id="formBeneficiario" method="post">
                     <div class="row">
 
-                        <!-- Nome -->
-                        <div class="col-md-4">
-                            <label for="Nome">Nome</label>
-                            <input type="text" class="form-control" id="Nome" name="Nome" required autofocus>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="Nome">Nome</label>
+                                <input required type="text" class="form-control" id="Nome" name="Nome">
+                            </div>
                         </div>
 
-                        <!-- CPF -->
-                        <div class="col-md-4">
-                            <label for="Cpf">CPF</label>
-                            <input type="text" class="form-control" id="Cpf" name="Cpf" maxlength="14" placeholder="000.000.000-00" required>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="Cpf">CPF</label>
+                                <input required type="text" class="form-control" id="Cpf" name="Cpf" maxlength="14" placeholder="000.000.000-00">
+                            </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-success">Incluir</button>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label style="visibility:hidden;">.</label>
+                                <button type="submit" class="btn btn-success btn-block">Incluir</button>
+                            </div>
                         </div>
+
                     </div>
+
                 </form>
             </div>
 
@@ -137,7 +144,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
                 </tbody>
             </table>
 
@@ -145,6 +151,56 @@
             <!-- Rodapé -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Sair</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal: Editar Beneficiário -->
+<div class="modal fade" id="modalEditarBeneficiario" tabindex="-1" role="dialog" aria-labelledby="modalEditarBeneficiarioLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <!-- Cabeçalho -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span>&times;</span></button>
+                <h4 class="modal-title" id="modalEditarBeneficiarioLabel">Editar Beneficiário</h4>
+            </div>
+
+            <!-- Formulário -->
+            <div class="modal-body">
+                <form id="formEditarBeneficiario" method="post">
+                    <input type="hidden" id="BeneficiarioIdEdt" name="Id">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="NomeEdt">Nome</label>
+                                <input required type="text" class="form-control" id="NomeEdt" name="Nome">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="CpfEdt">CPF</label>
+                                <input required type="text" class="form-control" id="CpfEdt" name="Cpf" maxlength="14" placeholder="000.000.000-00">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Estado de carregamento -->
+                <div id="editarLoading" class="text-center" style="display:none; margin-top:10px;">
+                    Carregando dados...
+                </div>
+            </div>
+
+            <!-- Rodapé -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" form="formEditarBeneficiario" class="btn btn-primary" id="btnSalvarEdicao">Salvar</button>
             </div>
 
         </div>
