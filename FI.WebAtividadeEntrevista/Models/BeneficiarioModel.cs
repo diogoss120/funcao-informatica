@@ -20,5 +20,11 @@ namespace FI.WebAtividadeEntrevista.Models
         /// </summary>
         [Required]
         public string Nome { get; set; }
+
+        /// <summary>
+        /// Id do cliente 
+        /// </summary>
+        [Required]
+        public long IdCliente { get; set; }
     }
 }

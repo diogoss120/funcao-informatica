@@ -34,7 +34,8 @@ namespace WebAtividadeEntrevista.Controllers
             var beneficiario = new Beneficiario
             {
                 Nome = model.Nome,
-                Cpf = model.Cpf
+                Cpf = model.Cpf,
+                IdCliente = model.IdCliente
             };
             model.Id = bo.Incluir(beneficiario);
 
@@ -44,9 +45,8 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult ListarPorCliente(long idCliente)
         {
-            var beneficiarios = new List<BeneficiarioModel> {
-                new BeneficiarioModel{Id =1 , Nome = "TEste" , Cpf = "Teste"}
-            };
+            var bo = new BoBeneficiario();
+            var beneficiarios = bo.Consultar(idCliente);
             return Json(beneficiarios);
         }
     }
