@@ -1,5 +1,11 @@
 ﻿
 $(document).ready(function () {
+
+    // desabilita botao de beneficiários no carregameto da página, e habilita apenas quando um cliente for cadastrado
+    if (!window.obj) {
+        $("#btnBeneficiario").prop("disabled", true);
+    }
+
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -14,23 +20,28 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
+                "Cpf": $(this).find("#Cpf").val(),
                 "Telefone": $(this).find("#Telefone").val()
             },
             error:
-            function (r) {
-                if (r.status == 400)
-                    ModalDialog("Ocorreu um erro", r.responseJSON);
-                else if (r.status == 500)
-                    ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
-            },
+                function (r) {
+                    if (r.status == 400)
+                        ModalDialog("Ocorreu um erro", r.responseJSON);
+                    else if (r.status == 500)
+                        ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
+                },
             success:
-            function (r) {
-                ModalDialog("Sucesso!", r)
-                $("#formCadastro")[0].reset();
-            }
+                function (r) {
+                    console.warn("retorno da controler: " + r.id);
+                    obj = { Id: r.id };
+                    $("#btnBeneficiario").prop("disabled", false);
+                    carregarBeneficiarios(); // essa função é criada no arquivo FI.Beneficiarios.js
+                    ModalDialog("Sucesso!", r.message)
+                    $("#formCadastro")[0].reset();
+                }
         });
     })
-    
+
 })
 
 function ModalDialog(titulo, texto) {

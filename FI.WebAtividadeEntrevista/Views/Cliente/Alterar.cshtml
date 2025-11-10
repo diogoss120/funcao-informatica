@@ -6,7 +6,6 @@
     <script>
         var urlPost = '@Url.Action("Alterar", "Cliente", new { area = "" })';
         var obj = @Html.Raw(Json.Encode(Model));
-        @*var idClienteEdicao = @Model.Id;*@
         var urlRetorno = '@Url.Action("Index", "Cliente", new { area = "" })';
     </script>
     @Scripts.Render("~/bundles/beneficiarios")

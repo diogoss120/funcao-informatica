@@ -69,7 +69,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
-                return Json("Cadastro efetuado com sucesso");
+                return Json(new {id = model.Id, message = "Cadastro efetuado com sucesso" });
             }
             catch (Exception)
             {
