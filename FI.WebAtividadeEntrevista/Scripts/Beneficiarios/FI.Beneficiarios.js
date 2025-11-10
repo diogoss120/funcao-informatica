@@ -24,7 +24,8 @@ function renderRow(item) {
         '<td>', esc(b.Nome || ''), '</td>',
         '<td>', esc(b.Cpf || ''), '</td>',
         '<td>',
-        '  <button type="button" class="btn btn-xs btn-primary js-alterar" data-id="', esc(b.Id), '">Alterar</button>',
+        '  <button type="button" class="btn btn-xs btn-primary js-alterar" data-id="', esc(b.Id), '">Alterar</button> ',
+        '  <button type="button" class="btn btn-xs btn-danger js-excluir" data-id="', esc(b.Id), '">Excluir</button>',
         '</td>',
         '</tr>'
     ].join('');
@@ -136,8 +137,6 @@ $(function () {
             Cpf: $(this).find('#Cpf').val(),
             IdCliente: idCliente
         };
-        // Se a Action espera UPPERCASE:
-        // payload = { NOME: ..., CPF: ..., IDCLIENTE: idCliente };
 
         $.ajax({
             url: '/Beneficiario/Incluir',
@@ -190,6 +189,34 @@ $(function () {
             })
             .always(function () {
                 $btn.prop('disabled', false).text($btn.data('old-text'));
+            });
+    });
+
+    // Clique em "Excluir" (delegado)
+    $(document).on('click', '#tblBeneficiarios .js-excluir', function () {
+        var id = $(this).data('id');
+        if (!id) return;
+
+        if (!confirm('Confirma a exclusão deste beneficiário?')) return;
+
+        var $btn = $(this);
+        var oldText = $btn.text();
+        $btn.prop('disabled', true).text('Excluindo...');
+
+        $.ajax({
+            url: '/Beneficiario/Excluir/' + id,
+            type: 'POST',
+            dataType: 'json',
+            data: { id: id }
+        })
+            .done(function (r) {
+                carregarBeneficiarios();
+            })
+            .fail(function (xhr) {
+                handleAjaxError(xhr, 'Não foi possível excluir o beneficiário.');
+            })
+            .always(function () {
+                $btn.prop('disabled', false).text(oldText);
             });
     });
 

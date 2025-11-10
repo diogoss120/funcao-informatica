@@ -160,5 +160,28 @@ namespace WebAtividadeEntrevista.Controllers
                 return Json("Ocorreu um erro interno no servidor.");
             }
         }
+
+        [HttpPost]
+        public JsonResult Excluir(long id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    Response.StatusCode = 400;
+                    return Json("Id inválido.");
+                }
+
+                var bo = new BoBeneficiario();
+                bo.Excluir(id);
+
+                return Json("Beneficiário excluído");
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = 500;
+                return Json("Ocorreu um erro interno no servidor.");
+            }
+        }
     }
 }

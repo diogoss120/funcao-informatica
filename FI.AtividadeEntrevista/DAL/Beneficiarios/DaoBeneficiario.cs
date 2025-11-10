@@ -79,5 +79,14 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             }
             return lista;
         }
+
+        internal void Excluir(long id)
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+
+            parametros.Add(new SqlParameter("Id", id));
+
+            base.Consultar("FI_SP_DelBenef", parametros);
+        }
     }
 }

@@ -34,5 +34,11 @@ namespace FI.AtividadeEntrevista.BLL
             var daoBeneficiario = new DaoBeneficiario();
             return daoBeneficiario.ObterPorId(idCliente);
         }
+
+        public void Excluir(long id)
+        {
+            var daoBeneficiario = new DaoBeneficiario();
+            daoBeneficiario.Excluir(id);
+        }
     }
 }
