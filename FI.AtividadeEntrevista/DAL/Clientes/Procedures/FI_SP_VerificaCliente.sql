@@ -1,0 +1,14 @@
+﻿CREATE PROC FI_SP_VerificaCliente
+    @CPF        VARCHAR(14),
+    @IDEXCLUIR  BIGINT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT CASE WHEN EXISTS (
+        SELECT 1
+        FROM CLIENTES c
+        WHERE c.CPF = @CPF
+          AND (@IDEXCLUIR IS NULL OR c.ID <> @IDEXCLUIR)
+    ) THEN 1 ELSE 0 END AS Existe;
+END

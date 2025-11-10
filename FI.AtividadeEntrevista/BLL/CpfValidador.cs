@@ -5,10 +5,10 @@ namespace FI.AtividadeEntrevista.BLL
 {
     public static class CpfValidador
     {
-        public static bool VerificarExistenciaCliente(string CPF)
+        public static bool VerificarExistenciaCliente(string CPF, long? id = null)
         {
             var cli = new DAL.DaoCliente();
-            return cli.VerificarExistencia(CPF);
+            return cli.VerificarExistencia(CPF, id);
         }
 
         public static bool VerificarExistenciaBeneficiario(string CPF, long idCliente, long? id = null)
