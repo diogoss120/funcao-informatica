@@ -41,6 +41,9 @@ namespace FI.WebAtividadeEntrevista
             bundles.Add(new ScriptBundle("~/bundles/beneficiarios").Include(
                       "~/Scripts/Beneficiarios/FI.Beneficiarios.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/cpf-mascara").Include(
+                      "~/Scripts/cpf-mascara.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));

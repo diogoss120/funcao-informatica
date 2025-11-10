@@ -2,6 +2,7 @@
 using FI.AtividadeEntrevista.DML;
 using FI.WebAtividadeEntrevista.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -44,7 +45,7 @@ namespace WebAtividadeEntrevista.Controllers
                 var beneficiario = new Beneficiario
                 {
                     Nome = model.Nome,
-                    Cpf = cpfLimpo,    
+                    Cpf = cpfLimpo,
                     IdCliente = model.IdCliente
                 };
 
@@ -94,7 +95,7 @@ namespace WebAtividadeEntrevista.Controllers
                 {
                     Id = model.Id,
                     Nome = model.Nome,
-                    Cpf = cpfLimpo,   
+                    Cpf = cpfLimpo,
                     IdCliente = model.IdCliente
                 };
 
@@ -123,7 +124,8 @@ namespace WebAtividadeEntrevista.Controllers
 
                 var bo = new BoBeneficiario();
                 var beneficiarios = bo.ListarPorCliente(idCliente);
-                return Json(beneficiarios);
+                var listaModel = beneficiarios?.Select(b => (BeneficiarioModel)b).ToList() ?? new List<BeneficiarioModel>();
+                return Json(listaModel);
             }
             catch (Exception)
             {
@@ -151,8 +153,8 @@ namespace WebAtividadeEntrevista.Controllers
                     Response.StatusCode = 404;
                     return Json("Beneficiário não encontrado.");
                 }
-
-                return Json(beneficiario);
+                BeneficiarioModel model = beneficiario;
+                return Json(model);
             }
             catch (Exception)
             {

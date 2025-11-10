@@ -22,7 +22,7 @@ function renderRow(item) {
     return [
         '<tr data-id="', esc(b.Id), '">',
         '<td>', esc(b.Nome || ''), '</td>',
-        '<td>', esc(b.Cpf || ''), '</td>',
+        '<td class="cpf-mascara-view">', esc(b.Cpf || ''), '</td>',
         '<td>',
         '  <button type="button" class="btn btn-xs btn-primary js-alterar" data-id="', esc(b.Id), '">Alterar</button> ',
         '  <button type="button" class="btn btn-xs btn-danger js-excluir" data-id="', esc(b.Id), '">Excluir</button>',
