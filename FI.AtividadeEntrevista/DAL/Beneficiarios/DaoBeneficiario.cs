@@ -48,7 +48,7 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             return lista.FirstOrDefault();
         }
 
-        internal bool Alterar(Beneficiario beneficiario)
+        internal void Alterar(Beneficiario beneficiario)
         {
             var parametros = new List<SqlParameter>();
 
@@ -56,10 +56,7 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             parametros.Add(new SqlParameter("Cpf", beneficiario.Cpf));
             parametros.Add(new SqlParameter("Id", beneficiario.Id));
 
-            // Executa o comando
-            DataSet ds = base.Consultar("FI_SP_AltBenef", parametros);
-
-            return true;
+            base.Consultar("FI_SP_AltBenef", parametros);
         }
 
         private List<Beneficiario> Converter(DataSet ds)
