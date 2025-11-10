@@ -36,7 +36,7 @@ namespace WebAtividadeEntrevista.Controllers
                 var cpfLimpo = model.Cpf?.GetCpfLimpo();
                 if (!string.IsNullOrEmpty(cpfLimpo))
                 {
-                    var cpfExistente = CpfValidador.VerificarExistencia(cpfLimpo);
+                    var cpfExistente = CpfValidador.VerificarExistenciaCliente(cpfLimpo);
                     if (cpfExistente) ModelState.AddModelError("Cpf", "O CPF informado já está sendo usado");
 
                     var cpfValido = CpfValidador.ValidarCpf(cpfLimpo);
@@ -92,6 +92,11 @@ namespace WebAtividadeEntrevista.Controllers
                 var cpfLimpo = model.Cpf?.GetCpfLimpo();
                 if (!string.IsNullOrEmpty(cpfLimpo))
                 {
+                    // acho que pra resolver a parte do update, vai ter que ir no banco e obter o dado original,
+                    // se mudar, ai consulta se o novo está sendo usado, se permaneceu igual nem precisa validar
+                    var cpfExistente = CpfValidador.VerificarExistenciaCliente(cpfLimpo);
+                    if (cpfExistente) ModelState.AddModelError("Cpf", "O CPF informado já está sendo usado");
+
                     var cpfValido = CpfValidador.ValidarCpf(cpfLimpo);
                     if (!cpfValido) ModelState.AddModelError("Cpf", "O CPF informado é inválido");
                 }

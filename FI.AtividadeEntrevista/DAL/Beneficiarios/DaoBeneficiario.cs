@@ -1,4 +1,5 @@
 ﻿using FI.AtividadeEntrevista.DML;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -10,7 +11,7 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
     {
         internal long Incluir(Beneficiario beneficiario)
         {
-            List<SqlParameter> parametros = new List<SqlParameter>();
+            var parametros = new List<SqlParameter>();
 
             parametros.Add(new SqlParameter("Nome", beneficiario.Nome));
             parametros.Add(new SqlParameter("Cpf", beneficiario.Cpf));
@@ -25,7 +26,7 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
 
         internal List<Beneficiario> ListarPorCliente(long IdCliente)
         {
-            List<SqlParameter> parametros = new List<SqlParameter>();
+            var parametros = new List<SqlParameter>();
 
             parametros.Add(new SqlParameter("IdCliente", IdCliente));
 
@@ -37,12 +38,11 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
 
         internal Beneficiario ObterPorId(long id)
         {
-            List<SqlParameter> parametros = new List<SqlParameter>();
+            var parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("Id", id));
 
             DataSet ds = base.Consultar("FI_SP_ObterBenefPorId", parametros);
 
-            // Reaproveita o método Converter e pega o primeiro item
             List<Beneficiario> lista = Converter(ds);
 
             return lista.FirstOrDefault();
@@ -50,7 +50,7 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
 
         internal bool Alterar(Beneficiario beneficiario)
         {
-            List<SqlParameter> parametros = new List<SqlParameter>();
+            var parametros = new List<SqlParameter>();
 
             parametros.Add(new SqlParameter("Nome", beneficiario.Nome));
             parametros.Add(new SqlParameter("Cpf", beneficiario.Cpf));
@@ -82,11 +82,25 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
 
         internal void Excluir(long id)
         {
-            List<SqlParameter> parametros = new List<SqlParameter>();
+            var parametros = new List<SqlParameter>();
 
             parametros.Add(new SqlParameter("Id", id));
 
             base.Consultar("FI_SP_DelBenef", parametros);
+        }
+
+        internal bool VerificarExistencia(string CPF, long idCliente, long? id = null)
+        {
+            var parametros = new List<SqlParameter>();
+
+            parametros.Add(new SqlParameter("CPF", CPF));
+            parametros.Add(new SqlParameter("idCliente", idCliente));
+            parametros.Add(new SqlParameter("IdExcluir", (object)id ?? DBNull.Value));
+
+            var ds = base.Consultar("FI_SP_VerificaBeneficiario", parametros);
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return false;
+            var existe = Convert.ToInt32(ds.Tables[0].Rows[0]["Existe"]);
+            return existe == 1;
         }
     }
 }

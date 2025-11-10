@@ -23,7 +23,7 @@ namespace WebAtividadeEntrevista.Controllers
                 var cpfLimpo = model.Cpf?.GetCpfLimpo();
                 if (!string.IsNullOrEmpty(cpfLimpo))
                 {
-                    var cpfExistente = CpfValidador.VerificarExistencia(cpfLimpo);
+                    var cpfExistente = CpfValidador.VerificarExistenciaBeneficiario(cpfLimpo, model.IdCliente);
                     if (cpfExistente) ModelState.AddModelError("Cpf", "O CPF informado já está sendo usado");
 
                     var cpfValido = CpfValidador.ValidarCpf(cpfLimpo);
@@ -73,7 +73,7 @@ namespace WebAtividadeEntrevista.Controllers
                 var cpfLimpo = model.Cpf?.GetCpfLimpo();
                 if (!string.IsNullOrEmpty(cpfLimpo))
                 {
-                    var cpfExistente = CpfValidador.VerificarExistencia(cpfLimpo);
+                    var cpfExistente = CpfValidador.VerificarExistenciaBeneficiario(cpfLimpo, model.IdCliente, model.Id);
                     if (cpfExistente) ModelState.AddModelError("Cpf", "O CPF informado já está sendo usado");
 
                     var cpfValido = CpfValidador.ValidarCpf(cpfLimpo);
@@ -177,7 +177,7 @@ namespace WebAtividadeEntrevista.Controllers
 
                 return Json("Beneficiário excluído");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Response.StatusCode = 500;
                 return Json("Ocorreu um erro interno no servidor.");

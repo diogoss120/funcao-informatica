@@ -1,0 +1,17 @@
+﻿
+CREATE PROC FI_SP_VerificaBeneficiario
+    @CPF         VARCHAR(11),
+    @IDCLIENTE   BIGINT,
+    @IDEXCLUIR   BIGINT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT CASE WHEN EXISTS (
+        SELECT 1
+        FROM BENEFICIARIOS b
+        WHERE b.CPF = @CPF
+          AND b.IDCLIENTE = @IDCLIENTE
+          AND (@IDEXCLUIR IS NULL OR b.ID <> @IDEXCLUIR)
+    ) THEN 1 ELSE 0 END AS Existe;
+END

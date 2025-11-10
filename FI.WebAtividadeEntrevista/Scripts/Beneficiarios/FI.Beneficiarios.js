@@ -165,13 +165,15 @@ $(function () {
     $('#formEditarBeneficiario').on('submit', function (e) {
         e.preventDefault();
 
+        var idCliente = window.idClienteEdicao || (window.obj && window.obj.Id);
         var $btn = $('#btnSalvarEdicao');
         $btn.prop('disabled', true).data('old-text', $btn.text()).text('Salvando...');
 
         var payload = {
             Id: $('#BeneficiarioIdEdt').val(),
             Nome: $('#NomeEdt').val(),
-            Cpf: $('#CpfEdt').val()
+            Cpf: $('#CpfEdt').val(),
+            idCliente
         };
 
         $.ajax({

@@ -1,14 +1,20 @@
-﻿using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using FI.AtividadeEntrevista.DAL.Beneficiarios;
+using System.Linq;
 
 namespace FI.AtividadeEntrevista.BLL
 {
     public static class CpfValidador
     {
-        public static bool VerificarExistencia(string CPF)
+        public static bool VerificarExistenciaCliente(string CPF)
         {
-            DAL.DaoCliente cli = new DAL.DaoCliente();
+            var cli = new DAL.DaoCliente();
             return cli.VerificarExistencia(CPF);
+        }
+
+        public static bool VerificarExistenciaBeneficiario(string CPF, long idCliente, long? id = null)
+        {
+            var ben = new DaoBeneficiario();
+            return ben.VerificarExistencia(CPF, idCliente, id);
         }
 
         public static string GetCpfLimpo(this string Cpf)
