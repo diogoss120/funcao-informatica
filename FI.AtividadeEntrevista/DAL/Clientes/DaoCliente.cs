@@ -1,5 +1,4 @@
-﻿using FI.AtividadeEntrevista.BLL;
-using FI.AtividadeEntrevista.DML;
+﻿using FI.AtividadeEntrevista.DML;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -55,11 +54,16 @@ namespace FI.AtividadeEntrevista.DAL
             return cli.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Valida se o CPF já está sendo usado 
+        /// </summary>
         internal bool VerificarExistencia(string cpf, long? id = null)
         {
             var parametros = new List<SqlParameter>();
 
             parametros.Add(new SqlParameter("CPF", cpf));
+
+            // ignora um id em específico - útil para validação em updates
             parametros.Add(new SqlParameter("IdExcluir", (object)id ?? DBNull.Value));
 
             var ds = base.Consultar("FI_SP_VerificaCliente", parametros);

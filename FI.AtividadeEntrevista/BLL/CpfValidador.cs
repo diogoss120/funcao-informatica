@@ -5,18 +5,27 @@ namespace FI.AtividadeEntrevista.BLL
 {
     public static class CpfValidador
     {
+        /// <summary>
+        /// Valida se existe outro cliente com o CPF
+        /// </summary>
         public static bool VerificarExistenciaCliente(string CPF, long? id = null)
         {
             var cli = new DAL.DaoCliente();
             return cli.VerificarExistencia(CPF, id);
         }
 
+        /// <summary>
+        /// Valida se existe outro beneficiário do cliente com o mesmo CPF
+        /// </summary>
         public static bool VerificarExistenciaBeneficiario(string CPF, long idCliente, long? id = null)
         {
             var ben = new DaoBeneficiario();
             return ben.VerificarExistencia(CPF, idCliente, id);
         }
 
+        /// <summary>
+        /// Valida estrutura básica de um CPF
+        /// </summary>
         public static string GetCpfLimpo(this string Cpf)
         {
             if (string.IsNullOrWhiteSpace(Cpf))

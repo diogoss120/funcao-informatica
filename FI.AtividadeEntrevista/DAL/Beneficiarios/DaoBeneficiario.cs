@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace FI.AtividadeEntrevista.DAL.Beneficiarios
 {
+    /// <summary>
+    /// Classe de acesso a dados de Beneficiário
+    /// </summary>
     internal class DaoBeneficiario : AcessoDados
     {
         internal long Incluir(Beneficiario beneficiario)
@@ -24,6 +27,9 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             return ret;
         }
 
+        /// <summary>
+        /// Lista beneficiários por id de cliente
+        /// </summary>
         internal List<Beneficiario> ListarPorCliente(long IdCliente)
         {
             var parametros = new List<SqlParameter>();
@@ -36,6 +42,9 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             return cli;
         }
 
+        /// <summary>
+        /// Obtem beneficiário por id
+        /// </summary>
         internal Beneficiario ObterPorId(long id)
         {
             var parametros = new List<SqlParameter>();
@@ -48,6 +57,9 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             return lista.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Altera beneficiário 
+        /// </summary>
         internal void Alterar(Beneficiario beneficiario)
         {
             var parametros = new List<SqlParameter>();
@@ -77,6 +89,9 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             return lista;
         }
 
+        /// <summary>
+        /// Exclui beneficiário 
+        /// </summary>
         internal void Excluir(long id)
         {
             var parametros = new List<SqlParameter>();
@@ -86,13 +101,18 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             base.Consultar("FI_SP_DelBenef", parametros);
         }
 
+        /// <summary>
+        /// Valida se o CPF já está sendo usado 
+        /// </summary>
         internal bool VerificarExistencia(string CPF, long idCliente, long? id = null)
         {
             var parametros = new List<SqlParameter>();
 
             parametros.Add(new SqlParameter("CPF", CPF));
             parametros.Add(new SqlParameter("idCliente", idCliente));
-            parametros.Add(new SqlParameter("IdExcluir", (object)id ?? DBNull.Value));
+            
+            // ignora um id em específico - útil para validação em updates
+            parametros.Add(new SqlParameter("IdExcluir", (object)id ?? DBNull.Value)); 
 
             var ds = base.Consultar("FI_SP_VerificaBeneficiario", parametros);
             if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return false;

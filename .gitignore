@@ -23,10 +23,6 @@ artifacts/
 iisexpress/
 *.vspscc
 
-## ASP.NET MVC
-App_Data/
-*.dbmdl
-
 ## Tests
 TestResults/
 *.coverage
